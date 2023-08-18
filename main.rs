@@ -7,7 +7,7 @@ fn main () {
     }
     match args[1].as_str() {
         "-f" | "-file" => {
-            let oargs:&String = &args[2].to_string().replace(".s",".o");
+            let oargs = &args[2].to_string().replace(".s",".o");
             let ldoargs = &args[2].to_string().replace(".s","");
             Command::new("as")
                 .arg("-o")
@@ -21,6 +21,17 @@ fn main () {
                .arg(ldoargs)
                .spawn()
                .expect("oop it no work check your code");
+        }
+        "-gcc" => {
+            let asm = args[2].to_string();
+            let oargs = &args[2].to_string().replace(".s","");
+            let c = args[3].to_string();
+            Command::new("gcc")
+                .arg("-std=c99")
+                .arg("-o")
+                .arg(oargs)
+                .arg(c)
+                .arg(asm); 
         }
         _ => { println!("use -f or --file to compile your gas"); exit(1);}
     }
